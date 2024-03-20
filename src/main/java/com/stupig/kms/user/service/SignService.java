@@ -4,6 +4,7 @@ import com.stupig.kms.common.cache.UserCacheResource;
 import com.stupig.kms.common.constants.ResponseCode;
 import com.stupig.kms.common.service.SessionService;
 import com.stupig.kms.common.utils.ThreadUtils;
+import com.stupig.kms.common.vo.ResponseListVO;
 import com.stupig.kms.common.vo.ResponseVO;
 import com.stupig.kms.common.vo.UserSessionVO;
 import com.stupig.kms.user.mapper.SignMapper;
@@ -18,7 +19,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -221,7 +221,7 @@ public class SignService {
      * @param response
      * @return
      */
-    public ResponseVO<List<SignUpListRVO>> signUpList(SignUpListPVO pvo, ResponseVO<List<SignUpListRVO>> response) {
+    public ResponseListVO<SignUpListRVO> signUpList(SignUpListPVO pvo, ResponseListVO<SignUpListRVO> response) {
         // 1. Page 처리
         if (pvo.getPage() == null) {
             pvo.setPage(1);
@@ -234,7 +234,7 @@ public class SignService {
         response.setData(signMapper.selectSignUpList(pvo));
         response.setTotalCount(signMapper.selectSignUpListCount(pvo));
         response.setPage(pvo.getPage());
-        response.setPage(pvo.getRowCount());
+        response.setRowCount(pvo.getRowCount());
         response.setSuccess();
 
         return response;

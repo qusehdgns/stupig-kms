@@ -8,11 +8,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @Setter
 @Getter
-@ToString(callSuper = true)
+@ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ResponseVO<T> extends PageVO {
+public class ResponseVO<T> implements Serializable {
     private static final long serialVersionUID = -5645565245831680392L;
 
     /* 응답코드 */
@@ -21,9 +23,6 @@ public class ResponseVO<T> extends PageVO {
     /* 응답메세지 */
     @JsonProperty("res_msg")
     private String resMsg;
-
-    @JsonProperty("total_count")
-    private Integer totalCount;
 
     @JsonProperty("data")
     private T data;

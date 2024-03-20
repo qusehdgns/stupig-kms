@@ -3,6 +3,7 @@ package com.stupig.kms.user.controller;
 import com.stupig.kms.common.annotations.QueryStringToJson;
 import com.stupig.kms.common.constants.ResponseCode;
 import com.stupig.kms.common.utils.StringUtils;
+import com.stupig.kms.common.vo.ResponseListVO;
 import com.stupig.kms.common.vo.ResponseVO;
 import com.stupig.kms.user.service.SignService;
 import com.stupig.kms.user.vo.sign.SignPVO;
@@ -10,8 +11,6 @@ import com.stupig.kms.user.vo.sign.SignUpListPVO;
 import com.stupig.kms.user.vo.sign.SignUpListRVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
@@ -114,8 +113,8 @@ public class SignController {
      * @return
      */
     @GetMapping("/signUpList")
-    public ResponseVO<List<SignUpListRVO>> signUpList(@QueryStringToJson SignUpListPVO pvo) {
-        ResponseVO<List<SignUpListRVO>> response = new ResponseVO<>();
+    public ResponseListVO<SignUpListRVO> signUpList(@QueryStringToJson SignUpListPVO pvo) {
+        ResponseListVO<SignUpListRVO> response = new ResponseListVO<>();
 
         response = signService.signUpList(pvo, response);
 
