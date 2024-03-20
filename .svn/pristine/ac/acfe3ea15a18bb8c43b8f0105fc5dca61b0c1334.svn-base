@@ -1,0 +1,12 @@
+server:
+  port: 8081
+
+spring:
+  profiles:
+    active: local
+
+mybatis:
+  configuration:
+    # snake case to camel case
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:/mapper/**/*SQL.xml

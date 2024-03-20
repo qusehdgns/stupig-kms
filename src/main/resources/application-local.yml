@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    jdbc-url: jdbc:mariadb://localhost:5406/stupig_kms?allowMultiQueries=true
+    username: stupig
+    password: qwe123!@#
+
+logging:
+  level:
+    root: info
+    '[org.springframework]': info
+    '[com.stupig]': debug
+    '[org.mybatis.spring.transaction.SpringManagedTransaction]': debug
+    '[org.mybatis.spring.SqlSessionUtils]': debug

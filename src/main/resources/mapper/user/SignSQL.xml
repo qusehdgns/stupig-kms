@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.stupig.kms.user.mapper.SignMapper">
+    <select id="selectUserInfoById"
+            parameterType="java.lang.String"
+            resultType="com.stupig.kms.user.vo.UserMgmtRVO"
+    >
+        SELECT /* SignSQL.xml selectUserInfoById */
+               A.user_seq
+              ,A.id
+              ,A.password
+              ,A.pw_expire_datetime
+              ,A.pw_wrong_count
+              ,A.name
+              ,A.comp_name
+              ,A.comp_id
+              ,A.phone
+              ,A.email
+              ,A.group_seq
+              ,A.auth
+              ,A.approve_user_seq
+              ,A.approve_datetime
+          FROM tb_user_m A
+         WHERE A.id = #{id}
+    </select>
+
+    <update id="updatePasswordCount" parameterType="com.stupig.kms.user.vo.UserMgmtPVO">
+        UPDATE /* SignSQL.xml updatePasswordCount */
+               tb_user_m A
+           SET A.pw_wrong_count = #{pwWrongCount}
+              ,A.last_operator = #{lastOperator}
+         WHERE A.user_seq = #{userSeq}
+    </update>
+
+    <insert id="insertUser" parameterType="com.stupig.kms.user.vo.UserMgmtPVO">
+        INSERT /* SignSQL.xml insertUser */
+          INTO tb_user_m
+             (
+               id
+              ,password
+              ,name
+              ,comp_name
+              ,comp_id
+              ,phone
+              ,email
+              ,first_operator
+              ,last_operator
+             )
+        VALUES
+             (
+               #{id}
+              ,#{password}
+              ,#{name}
+              ,#{compName}
+              ,#{compId}
+              ,#{phone}
+              ,#{email}
+              ,#{firstOperator}
+              ,#{lastOperator}
+             )
+    </insert>
+
+    <select id="selectUserInfo" parameterType="java.lang.Long" resultType="com.stupig.kms.user.vo.UserMgmtRVO">
+        SELECT /* SignSQL.xml selectUserInfo */
+               A.user_seq
+              ,A.id
+              ,A.password
+              ,A.pw_expire_datetime
+              ,A.pw_wrong_count
+              ,A.name
+              ,A.comp_name
+              ,A.comp_id
+              ,A.phone
+              ,A.email
+              ,A.group_seq
+              ,A.auth
+              ,A.approve_user_seq
+              ,A.approve_datetime
+          FROM tb_user_m A
+         WHERE A.user_seq = #{userSeq}
+    </select>
+
+    <update id="signConfirm" parameterType="com.stupig.kms.user.vo.UserMgmtPVO">
+        UPDATE /* SignSQL.xml signConfirm */
+               tb_user_m A
+           SET A.approve_user_seq = #{approveUserSeq}
+              ,A.approve_datetime = #{approveDatetime}
+               <if test='groupSeq != null'>
+                   ,A.group_seq = #{groupSeq}
+               </if>
+              ,A.auth = #{auth}
+              ,A.last_operator = #{lastOperator}
+         WHERE A.user_seq = #{userSeq}
+    </update>
+
+    <sql id="sqlSelectSignUpList">
+          FROM tb_user_m A
+         WHERE A.approve_user_seq IS NULL
+    </sql>
+
+    <select id="selectSignUpList" parameterType="com.stupig.kms.user.vo.sign.SignUpListPVO" resultType="com.stupig.kms.user.vo.sign.SignUpListRVO">
+        SELECT /* SignSQL.xml selectSignUpList */
+               A.user_seq
+              ,A.id
+              ,A.name
+              ,A.comp_name
+              ,A.comp_id
+              ,A.phone
+              ,A.email
+        <include refid="sqlSelectSignUpList" />
+         ORDER BY A.user_seq
+        <if test="rowCount != null">
+         LIMIT #{rowCount}
+            <if test="page != null">
+                OFFSET ${(page - 1) * rowCount}
+            </if>
+        </if>
+    </select>
+
+    <select id="selectSignUpListCount" resultType="java.lang.Integer">
+        SELECT /* SignSQL.xml selectSignUpListCount */
+               COUNT(*)
+        <include refid="sqlSelectSignUpList" />
+    </select>
+</mapper>
