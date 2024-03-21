@@ -31,8 +31,7 @@ public class UserCacheInterceptor implements HandlerInterceptor {
         // 1. Session 검증
         UserSessionVO userSession = sessionService.getUserSession();
         if (userSession == null || userSession.getUserSeq() == null) {
-            // FIXME : 로그인 가이드 필요
-            ResponseUtils.responseError(response,  new ResponseVO<Void>(ResponseCode.ETC_ERROR));
+            ResponseUtils.responseError(response,  new ResponseVO<Void>(ResponseCode.SESSION_ERROR));
             return false;
         }
 
@@ -40,17 +39,14 @@ public class UserCacheInterceptor implements HandlerInterceptor {
         CommonCacheVO userCache = userCacheResource.getUserCache(userSession.getUserSeq());
         if (userCache == null) {
             /* 비정상 접근 */
-
             // 1. Session 저장 정보 파기
             sessionService.removeUserSession();
 
-            // FIXME : 로그인 가이드 필요
             ResponseUtils.responseError(response,  new ResponseVO<Void>(ResponseCode.ETC_ERROR));
             return false;
         } else if (!SessionUtils.getSessionId().equals(userCache.getSessionId())) {
             /* 중복 로그인 */
-            // FIXME : 중복 로그인 기존 사용자 가이드 필요. ex) 다른 장소에서 로그인 되었습니다.
-            ResponseUtils.responseError(response,  new ResponseVO<Void>(ResponseCode.ETC_ERROR));
+            ResponseUtils.responseError(response,  new ResponseVO<Void>(ResponseCode.MULTIPLE_SIGN_IN));
             return false;
         } else if (userCache.getExpiredTime() == null || userCache.getExpiredTime().isBefore(LocalDateTime.now())) {
             /* 로그인 만료 */
@@ -60,8 +56,7 @@ public class UserCacheInterceptor implements HandlerInterceptor {
             // 2. Cache 정보 파기
             userCacheResource.removeUserCache(userSession.getUserSeq());
 
-            // FIXME : 로그인 정보 만료 재로그인 가이드 필요
-            ResponseUtils.responseError(response,  new ResponseVO<Void>(ResponseCode.ETC_ERROR));
+            ResponseUtils.responseError(response,  new ResponseVO<Void>(ResponseCode.LOGIN_TIMEOUT));
             return false;
         }
 

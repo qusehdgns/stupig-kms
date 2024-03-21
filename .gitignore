@@ -34,3 +34,5 @@ build/
 
 ### SVN ###
 .svn
+.svn/**
+.svn/wc.db

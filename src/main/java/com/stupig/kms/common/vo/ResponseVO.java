@@ -75,6 +75,12 @@ public class ResponseVO<T> implements Serializable {
             case ResponseCode.APPROVED_USER:
                 this.resMsg = "기승인 사용자";
                 break;
+            case ResponseCode.LOGIN_TIMEOUT:
+                this.resMsg = "로그인 시간 만료";
+                break;
+            case ResponseCode.SESSION_ERROR:
+                this.resMsg = "세션 오류";
+                break;
             case ResponseCode.EXCEPTION:
                 this.resMsg = "EXCEPTION - ";
                 break;
